@@ -11,7 +11,6 @@ import ChromeBrowserApi = require('./chrome_browser_api');
 import ChromeCoreConnector = require('./chrome_core_connector');
 import ChromeTabAuth = require('./chrome_tab_auth');
 
-import UiApi = require('../../../interfaces/ui');
 import UI = require('../../../generic_ui/scripts/ui');
 import CoreConnector = require('../../../generic_ui/scripts/core_connector');
 import uproxy_core_api = require('../../../interfaces/uproxy_core_api');
@@ -118,7 +117,7 @@ function initUI() : UI.UserInterface {
       // to allow a url to be pasted twice if there has been at least a second
       // delay in order to allow users to try connecting again.
       if (lastUrl !== url || Date.now() - lastUrlTime > 1000) {
-        chromeBrowserApi.trigger('urlData', url);
+        chromeBrowserApi.emit('urlData', url);
       } else {
         console.warn('Received duplicate url events', url);
       }

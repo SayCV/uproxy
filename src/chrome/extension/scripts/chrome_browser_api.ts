@@ -18,7 +18,7 @@ enum PopupState {
     LAUNCHED
 }
 
-declare var Notification :any; //TODO remove this
+declare var Notification :any; //TODO better type needed
 
 class ChromeBrowserApi implements BrowserAPI {
 
@@ -176,7 +176,7 @@ class ChromeBrowserApi implements BrowserAPI {
           tag: tag
         });
     notification.onclick = function() {
-      this.trigger('notificationClicked', this.tag);
+      this.emit('notificationClicked', this.tag);
     };
     setTimeout(function() {
       notification.close();
@@ -189,11 +189,11 @@ class ChromeBrowserApi implements BrowserAPI {
     this.events_[name] = callback;
   }
 
-  public trigger = (name :string, ...args :Object[]) => {
+  public emit = (name :string, ...args :Object[]) => {
     if (name in this.events_) {
       this.events_[name].apply(null, args);
     } else {
-      console.error('Attempted to trigger an unknown event', name);
+      console.error('Attempted to emit an unknown event', name);
     }
   }
 }
