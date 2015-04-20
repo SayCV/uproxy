@@ -46,6 +46,10 @@
     "loggingprovider": {
       "url": "uproxy-lib/loggingprovider/loggingprovider.json",
       "api": "loggingprovider"
+    },
+    "metrics": {
+      "url": "../lib/freedomjs-anonymized-metrics/anonmetrics.json",
+      "api": "metrics"
     }
   },
   "permissions": [

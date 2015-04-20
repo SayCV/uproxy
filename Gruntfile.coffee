@@ -269,6 +269,10 @@ module.exports = (grunt) ->
           ]
           dest: chromeAppDevPath + 'lib/'
         }, {
+          expand: true, cwd: 'node_modules/freedomjs-anonymized-metrics', flatten: true
+          src: ['**']
+          dest: chromeAppDevPath + 'lib/freedomjs-anonymized-metrics'
+        }, {
           expand: true, cwd: 'node_modules/freedom-social-xmpp', flatten: true
           src: [
             'dist/**'
@@ -374,6 +378,10 @@ module.exports = (grunt) ->
           expand: true, cwd: 'node_modules/freedom/providers/social'
           src: ['websocket-server/**']
           dest: firefoxDevPath + 'data/lib'
+        }, {
+          expand: true, cwd: 'node_modules/freedomjs-anonymized-metrics/'
+          src: ['**']
+          dest: firefoxDevPath + 'data/lib/freedomjs-anonymized-metrics'
         }, {
           expand: true, cwd: 'node_modules/freedom-social-xmpp/dist/'
           src: ['**']
