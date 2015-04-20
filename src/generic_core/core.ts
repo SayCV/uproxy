@@ -25,6 +25,15 @@ var loggingProvider = freedom['loggingprovider']();
 loggingProvider.setConsoleFilter(['*:I']);
 loggingProvider.setBufferedLogFilter(['*:D']);
 
+var counterMetric = {
+  type: 'logarithmic', base: 2, num_bloombits: 8, num_hashes: 2,
+  num_cohorts: 64, prob_p: 0.5, prob_q: 0.75, prob_f: 0.5, flag_oneprr: true
+};
+var metricsProvider = freedom['metrics']({
+  name: 'uProxyMetrics',
+  definition: {'success-v1': counterMetric, 'failure-v1': counterMetric}
+});
+
 declare var UPROXY_VERSION;
 
 var log :Logging.Log = new Logging.Log('core');
