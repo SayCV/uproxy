@@ -51,27 +51,29 @@ class Metrics {
   }
 
   private sendReport_ = () => {
-    log.info('sending metrics report');
-    this.onceLoaded_.then(() => {
-      var successReport =
-          this.metricsProvider_.report('success-v1', this.data_.success);
-      var failureReport =
-          this.metricsProvider_.report('failure-v1', this.data_.failure);
-      Promise.all([successReport, failureReport]).then(() => {
-        this.metricsProvider_.retrieve().then((payload) => {
-          ui.update(
-              uProxy.Update.POST_TO_CLOUDFRONT,
-              {payload: payload, cloudfrontPath: 'submit-rappor-stats'});
-          // Reset success and failure counts after sending report, and
-          // update the nextSendTimestamp.
-          this.data_.success = 0;
-          this.data_.failure = 0;
-          this.updateNextSendTimestamp_();
-        });
-      }).catch((e) => {
-        log.error('Error retrieving metrics', e);
-      });
-    });
+    // TODO: uncomment this out when we have a user setting and UI to enable
+    // metrics collection
+    // log.info('sending metrics report');
+    // this.onceLoaded_.then(() => {
+    //   var successReport =
+    //       this.metricsProvider_.report('success-v1', this.data_.success);
+    //   var failureReport =
+    //       this.metricsProvider_.report('failure-v1', this.data_.failure);
+    //   Promise.all([successReport, failureReport]).then(() => {
+    //     this.metricsProvider_.retrieve().then((payload) => {
+    //       ui.update(
+    //           uProxy.Update.POST_TO_CLOUDFRONT,
+    //           {payload: payload, cloudfrontPath: 'submit-rappor-stats'});
+    //       // Reset success and failure counts after sending report, and
+    //       // update the nextSendTimestamp.
+    //       this.data_.success = 0;
+    //       this.data_.failure = 0;
+    //       this.updateNextSendTimestamp_();
+    //     });
+    //   }).catch((e) => {
+    //     log.error('Error retrieving metrics', e);
+    //   });
+    // });
   }
 
   public increment = (name) => {
