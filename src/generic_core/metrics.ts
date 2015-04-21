@@ -58,10 +58,12 @@ class Metrics {
     this.onceLoaded_.then(() => {
       var successReport =
           this.metricsProvider_.report('success-v1', this.data_.success)
-          .then((x) => { console.log('succcess: ' + x) });  // TODO: remove
+          .then((x) => { console.log('succcess: ' + x) })
+          .catch((e) => { console.error('error reading success: ' + e)});  // TODO: remove
       var failureReport =
           this.metricsProvider_.report('failure-v1', this.data_.failure)
-          .then((x) => { console.log('failure: ' + x) });  // TODO: remove
+          .then((x) => { console.log('failure: ' + x) })
+          .catch((e) => { console.error('error reading failure: ' + e)});  // TODO: remove
       log.info('Promise.all: ' + Promise.all);
       // Promise.all([successReport, failureReport]).then(() => {  // TODO: use this
       Promise.all([]).then(() => {
