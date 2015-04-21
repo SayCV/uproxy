@@ -202,10 +202,12 @@ module Core {
           }
       ).then((endpoint :Net.Endpoint) => {
         this.localGettingFromRemote = GettingState.GETTING_ACCESS;
+        metrics.increment('success');
         this.stateRefresh_();
         return endpoint;
       }).catch((e :Error) => {
         this.localGettingFromRemote = GettingState.NONE;
+        metrics.increment('failure');
         this.stateRefresh_();
         return Promise.reject(Error('Could not start proxy'));
       });
