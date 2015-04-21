@@ -74,7 +74,8 @@ module uProxy {
     START_GIVING,
     STOP_GIVING,
     STATE,
-    FRIEND_FAILED_TO_GET
+    FRIEND_FAILED_TO_GET,
+    POST_TO_CLOUDFRONT
   }
 
   /**
@@ -291,6 +292,11 @@ module uProxy {
 
   export var STORAGE_VERSION = 1;
   export var MESSAGE_VERSION = 1;
+
+  export interface CloudfrontPostData {
+    payload        :Object;
+    cloudfrontPath :string;
+  }
 }  // module uProxy
 
 module Social {

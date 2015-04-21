@@ -5,6 +5,7 @@
     "script": [
       "uproxy-lib/arraybuffers/arraybuffers.js",
       "uproxy-lib/handler/queue.js",
+      "uproxy-lib/crypto/random.js",
       "uproxy-networking/ipaddrjs/ipaddr.min.js",
       "uproxy-lib/logging/logging.js",
       "uproxy-lib/webrtc/datachannel.js",
@@ -27,7 +28,8 @@
       "social.js",
       "messages.js",
       "diagnose.js",
-      "core.js"
+      "core.js",
+      "metrics.js"
     ]
   },
   "dependencies": {

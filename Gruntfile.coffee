@@ -85,6 +85,7 @@ FILES =
     'rtc-to-net/rtc-to-net.js'
   ]
   uproxy_lib_common: [
+    'crypto/random.js'
     'logging/logging.js'
     'loggingprovider/loggingprovider.js'
     'loggingprovider/loggingprovider.json'

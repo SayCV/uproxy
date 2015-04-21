@@ -369,6 +369,12 @@ module UI {
         // to open.
         this.toastMessage = UI.SHARE_FAILED_MSG + nameOfFriend;
       });
+
+      core.onUpdate(
+          uProxy.Update.POST_TO_CLOUDFRONT,
+          (data :uProxy.CloudfrontPostData) => {
+        this.postToCloudfrontSite(data.payload, data.cloudfrontPath);
+      });
     }
 
     // Because of an observer (in root.ts) watching the value of
@@ -822,14 +828,31 @@ module UI {
       "d1wtwocg4wx1ih.cloudfront.net"
     ]
 
-    public sendFeedback = (feedback :uProxy.UserFeedback, maxAttempts?:number) : Promise<void> => {
+    public postToCloudfrontSite = (payload :any, cloudfrontPath :string,
+                                   maxAttempts ?:number)
+        : Promise<void> => {
+      console.log('postToCloudfrontSite: ', payload, cloudfrontPath);
       if (!maxAttempts || maxAttempts > this.cloudfrontDomains_.length) {
         // default to trying every possible URL
         maxAttempts = this.cloudfrontDomains_.length;
       }
+      var attempts = 0;
+      var doAttempts = (error?:Error) => {
+        if (attempts < maxAttempts) {
+          // we want to keep trying this until we either run out of urls to
+          // send to or one of the requests succeeds.  We set this up by
+          // creating a lambda to call the post with failures set up to recurse
+          return this.browserApi.frontedPost(payload, this.AWS_FRONT_DOMAIN,
+            this.cloudfrontDomains_[attempts++], cloudfrontPath
+          ).catch(doAttempts);
+        }
+        throw error;
+      }
+      return doAttempts();
+    }
 
+    public sendFeedback = (feedback :uProxy.UserFeedback) : Promise<void> => {
       var logsPromise :Promise<string>;
-
       if (feedback.logs) {
         logsPromise = this.core.getLogs().then((logs) => {
           var browserInfo = 'Browser Info: ' + feedback.browserInfo + '\n\n';
@@ -838,30 +861,13 @@ module UI {
       } else {
         logsPromise = Promise.resolve('');
       }
-
       return logsPromise.then((logs) => {
-        var attempts = 0;
-
         var payload = {
           email: feedback.email,
           feedback: feedback.feedback,
           logs: logs
         };
-
-        var doAttempts = (error?:Error) => {
-          if (attempts < maxAttempts) {
-            // we want to keep trying this until we either run out of urls to
-            // send to or one of the requests succeeds.  We set this up by
-            // creating a lambda to call the post with failures set up to recurse
-            return this.browserApi.frontedPost(payload, this.AWS_FRONT_DOMAIN,
-              this.cloudfrontDomains_[attempts++], "submit-feedback"
-            ).catch(doAttempts);
-          }
-
-          throw error;
-        }
-
-        return doAttempts();
+        return this.postToCloudfrontSite(payload, 'submit-feedback');
       });
     }
   }  // class UserInterface
