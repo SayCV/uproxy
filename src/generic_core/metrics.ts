@@ -78,7 +78,7 @@ class Metrics {
           this.data_.success = 0;
           this.data_.failure = 0;
           this.updateNextSendTimestamp_();  // Saves to storage
-        });
+        }).catch((e) => { console.error('error in retrieve') });
       }).catch((e) => {
         log.error('Error retrieving metrics', e);
       });
